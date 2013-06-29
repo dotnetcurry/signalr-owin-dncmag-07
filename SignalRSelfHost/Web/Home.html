@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>SignalR Self Host</title>
+    <script src="Scripts/jquery-2.0.2.min.js"></script>
+    <script src="Scripts/jquery.signalR-1.1.2.min.js"></script>
+    <script src="../signalr/hubs"></script>
+  </head>
+  <body>
+    <h1>SignalR Self Hosting</h1>
+    <div>
+      <div>
+        <textarea id="messagesText" rows="20" style="width:100%"></textarea>
+      </div>
+      <div>
+        <textarea id="newMessage" rows="3"></textarea>
+        <button id="sendMessage">Send</button>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      var hub = $.connection.myHub,
+      $msgText = $("#messagesText"),
+      $newMessage = $("#newMessage");
+
+
+      hub.client.addMessage = function (message)
+      {
+        $msgText.text($msgText.text() + "\r\n" + message);
+      }
+
+      $.connection.hub.start().done(function () {
+      $(document).on('click', '#sendMessage', function(){
+      hub.server.send($newMessage.val());
+      });
+      });
+    </script>
+  </body>
+
+</html>
